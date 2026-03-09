@@ -1,0 +1,4 @@
+profiles.yml
+target/
+.env
+dbt_packages/

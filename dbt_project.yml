@@ -1,0 +1,33 @@
+name: 'datagrokr'
+version: '1.0.0'
+config-version: 2
+
+profile: 'datagrokr'
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+test-paths: ["tests"]
+
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+# Fixed query comment — use node.name not model.name
+query-comment:
+  comment: "dbt_{{ target.name }}_{{ node.name }}"
+  append: true
+
+models:
+  datagrokr:
+    staging:
+      +schema: staging
+      +materialized: view
+      +pre-hook:
+        - "ALTER SESSION SET QUERY_TAG = 'dbt_{{ target.name }}_staging'"
+    marts:
+      +schema: marts
+      +materialized: table
+      +pre-hook:
+        - "ALTER SESSION SET QUERY_TAG = 'dbt_{{ target.name }}_marts'"
+      +post-hook:
+        - "{{ log_model_run() }}"

@@ -1,0 +1,25 @@
+version: 2
+
+sources:
+  - name: raw
+    database: ANALYTICS_DEV
+    schema: RAW
+    tables:
+      - name: gl_transactions
+        description: "Raw General Ledger transaction entries"
+        freshness:
+          warn_after: {count: 24, period: hour}
+          error_after: {count: 48, period: hour}
+        loaded_at_field: created_at
+
+      - name: chart_of_accounts
+        description: "Chart of accounts reference/lookup table"
+
+      - name: cost_centers
+        description: "Cost center reference/lookup table"
+
+      - name: vendors
+        description: "Vendor master reference table"
+
+      - name: currency_rates
+        description: "Currency exchange rates to USD"

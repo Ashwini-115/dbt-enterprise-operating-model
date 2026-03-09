@@ -1,0 +1,39 @@
+version: 2
+
+models:
+  - name: mart_gl_detail
+    description: "Full GL detail enriched with account, cost center, vendor and currency lookups"
+    columns:
+      - name: transaction_id
+        tests:
+          - not_null
+          - unique
+      - name: account_code
+        tests:
+          - not_null
+      - name: financial_statement
+        tests:
+          - accepted_values:
+              values: ['Balance Sheet', 'Profit & Loss', 'Unclassified']
+      - name: net_amount_usd
+        tests:
+          - not_null
+
+  - name: mart_trial_balance
+    description: "Aggregated trial balance by account and fiscal period"
+    columns:
+      - name: account_code
+        tests:
+          - not_null
+      - name: balance_status
+        tests:
+          - accepted_values:
+              values: ['Positive Balance', 'Negative Balance — Review Required', 'Zero Balance']
+
+  - name: mart_vendor_spend
+    description: "Vendor spend analysis with tier classification"
+    columns:
+      - name: vendor_spend_tier
+        tests:
+          - accepted_values:
+              values: ['Tier 1 — Strategic', 'Tier 2 — Preferred', 'Tier 3 — Standard', 'Tier 4 — Spot']
